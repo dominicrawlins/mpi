@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include "mpi.h"
 
 // Define output file name
 #define OUTPUT_FILE "stencil.pgm"
@@ -30,6 +31,9 @@ int main(int argc, char *argv[]) {
 
   // Set the input image
   init_image(nx, ny, image, tmp_image);
+
+  //initialise mpi
+  MPI_Init( &argc, &argv );
 
   // Call the stencil kernel
   double tic = wtime();
