@@ -72,6 +72,8 @@ int main(int argc, char *argv[]) {
   output_image(OUTPUT_FILE, nx, ny, image);
   free(image);
 
+  printf("Hello, world; from host %s: process %d of %d\n", hostname, rank, size);
+
     MPI_Finalize();
     return EXIT_SUCCESS;
 }
