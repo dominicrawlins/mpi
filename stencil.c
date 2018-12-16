@@ -50,11 +50,11 @@ int main(int argc, char *argv[]) {
   double toc = wtime();
 
   MPI_Initialized(&flag);
-
+/*
   if(flag!=1){
     MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
   }
-
+*/
    MPI_Get_processor_name(hostname,&strlen);
 
 
@@ -84,7 +84,7 @@ void stencil(const short nx, const short ny, float * restrict image, float * res
   tmp_image[0] = image[0] * 0.6f;
   tmp_image[0] += image[nx] * 0.1f;
   tmp_image[0] += image[0] * 0.1f;
-  #pragma vector always
+  //#pragma vector always
   for (int j = 1; j < ny-1; ++j) {
     tmp_image[j] = image[j] * 0.6f;
     tmp_image[j] += image[j  +nx] * 0.1f;
@@ -96,14 +96,14 @@ void stencil(const short nx, const short ny, float * restrict image, float * res
   tmp_image[ny-1] += image[(ny-1) +nx] * 0.1f;
   tmp_image[ny-1] += image[(ny-1)-1] * 0.1f;
 
-  #pragma vector always
+  //#pragma vector always
   for (int i = 1; i < nx-1; ++i) {
     //when j=0
     tmp_image[i*nx] = image[i*nx] * 0.6f;
     tmp_image[i*nx] += image[(i-1)*nx] * 0.1f;
     tmp_image[i*nx] += image[(i+1)*nx] * 0.1f;
     tmp_image[i*nx] += image[1+i*nx] * 0.1f;
-    #pragma vector always
+    //#pragma vector always
     for (int j = 1; j < ny-1; ++j) {
       tmp_image[j+i*nx] = image[j+i*nx] * 0.6f;
       tmp_image[j+i*nx] += image[j  +(i-1)*nx] * 0.1f;
@@ -122,7 +122,7 @@ void stencil(const short nx, const short ny, float * restrict image, float * res
   tmp_image[(nx-1)*nx] = image[(nx-1)*nx] * 0.6f;
   tmp_image[(nx-1)*nx] += image[((nx-1)-1)*nx] * 0.1f;
   tmp_image[(nx-1)*nx] += image[1+(nx-1)*nx] * 0.1f;
-  #pragma vector always
+  //#pragma vector always
   for (int j = 1; j < ny-1; ++j) {
     tmp_image[j+(nx-1)*nx] = image[j+(nx-1)*nx] * 0.6f;
     tmp_image[j+(nx-1)*nx] += image[j  +((nx-1)-1)*nx] * 0.1f;
