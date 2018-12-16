@@ -1,12 +1,12 @@
 #
-# Makefile to build example MPI programs 
+# Makefile to build example MPI programs
 #
 
 CC=mpicc
 
 COMP=GNU
 ifeq ($(COMP), GNU)
-  CFLAGS=-Wall
+  CFLAGS=-std=c99 -Wall
 endif
 
 EXE1=stencil.exe
@@ -21,5 +21,5 @@ $(EXES): %.exe : %.c
 .PHONY: clean all
 
 clean:
-	\rm -f $(EXES) 
+	\rm -f $(EXES)
 	\rm -f *.o
