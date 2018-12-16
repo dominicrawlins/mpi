@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 #PBS -N MPI
 #PBS -o OUT
@@ -9,10 +9,10 @@
 #PBS -m a
 
 #! application name
-application="blocking.exe"
+application="stencil"
 
 #! Run options for the application
-options=""
+options="1024 1024 10"
 
 ###############################################################
 ### You should not have to change anything below this line ####
@@ -28,7 +28,7 @@ echo Directory is `pwd`
 echo PBS job ID is $PBS_JOBID
 echo This jobs runs on the following machines:
 echo `cat $PBS_NODEFILE | uniq`
- 
+
 #! Create a machine file for MPI
 cat $PBS_NODEFILE > machine.file.$PBS_JOBID
 
