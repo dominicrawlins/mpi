@@ -7,6 +7,8 @@
 // Define output file name
 #define OUTPUT_FILE "stencil.pgm"
 
+#define MASTER 0
+
 void stencil(const short nx, const short ny, float * restrict image, float * restrict  tmp_image);
 void init_image(const short nx, const short ny, float * restrict  image, float * restrict  tmp_image);
 void output_image(const char * file_name, const short nx, const short ny, float *image);
@@ -30,8 +32,9 @@ int main(int argc, char *argv[]) {
   float * restrict tmp_image = malloc(sizeof(float)*nx*ny);
 
   // Set the input image
+  if(rank == MASTER){
   init_image(nx, ny, image, tmp_image);
-
+}
   int rank;
   int size;
   int flag;
@@ -41,27 +44,33 @@ int main(int argc, char *argv[]) {
   //initialise mpi
   MPI_Init( &argc, &argv );
 
+  MPI_Initialized(&flag);
+  if(flag!=1){
+    MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+  }
+
+
+
+  MPI_Get_processor_name(hostname,&strlen);
+
+
+  MPI_Comm_size( MPI_COMM_WORLD, &size );
+
+  /* determine the RANK of the current process [0:SIZE-1] */
+  MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+
+
   // Call the stencil kernel
   double tic = wtime();
+  if(rank == MASTER){
   for (short t = 0; t < niters; ++t) {
     stencil(nx, ny, image, tmp_image);
     stencil(nx, ny, tmp_image, image);
   }
+}
   double toc = wtime();
 
-  MPI_Initialized(&flag);
-/*
-  if(flag!=1){
-    MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-  }
-*/
-   MPI_Get_processor_name(hostname,&strlen);
 
-
-   MPI_Comm_size( MPI_COMM_WORLD, &size );
-
-   /* determine the RANK of the current process [0:SIZE-1] */
-   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
 
 
   // Output
@@ -69,7 +78,8 @@ int main(int argc, char *argv[]) {
   printf(" runtime: %lf s\n", toc-tic);
   printf("------------------------------------\n");
 
-  output_image(OUTPUT_FILE, nx, ny, image);
+
+  if (rank==MASTER){ output_image(OUTPUT_FILE, nx, ny, image)};
   free(image);
 
   printf("Hello, world; from host %s: process %d of %d\n", hostname, rank, size);
