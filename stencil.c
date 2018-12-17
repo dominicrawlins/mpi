@@ -31,10 +31,7 @@ int main(int argc, char *argv[]) {
   float * restrict image = malloc(sizeof(float)*nx*ny);
   float * restrict tmp_image = malloc(sizeof(float)*nx*ny);
 
-  // Set the input image
-  if(rank == MASTER){
-  init_image(nx, ny, image, tmp_image);
-}
+
   int rank;
   int size;
   int flag;
@@ -60,6 +57,11 @@ int main(int argc, char *argv[]) {
   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
 
 
+  // Set the input image
+  if(rank == MASTER){
+  init_image(nx, ny, image, tmp_image);
+}
+
   // Call the stencil kernel
   double tic = wtime();
   if(rank == MASTER){
@@ -79,7 +81,9 @@ int main(int argc, char *argv[]) {
   printf("------------------------------------\n");
 
 
-  if (rank==MASTER){ output_image(OUTPUT_FILE, nx, ny, image)};
+  if (rank==MASTER){
+     output_image(OUTPUT_FILE, nx, ny, image);
+   }
   free(image);
 
   printf("Hello, world; from host %s: process %d of %d\n", hostname, rank, size);
