@@ -38,37 +38,37 @@ int main(int argc, char *argv[]) {
   int strlen;
   char hostname[MPI_MAX_PROCESSOR_NAME];
 
-  //initialise mpi
-  MPI_Init( &argc, &argv );
-
-  MPI_Initialized(&flag);
-  if(flag!=1){
-    MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-  }
-
-
-
-  MPI_Get_processor_name(hostname,&strlen);
-
-
-  MPI_Comm_size( MPI_COMM_WORLD, &size );
-
-  /* determine the RANK of the current process [0:SIZE-1] */
-  MPI_Comm_rank( MPI_COMM_WORLD, &rank );
-
-
-  // Set the input image
-  if(rank == MASTER){
-  init_image(nx, ny, image, tmp_image);
-}
-
+//   //initialise mpi
+//   MPI_Init( &argc, &argv );
+//
+//   MPI_Initialized(&flag);
+//   if(flag!=1){
+//     MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+//   }
+//
+//
+//
+//   MPI_Get_processor_name(hostname,&strlen);
+//
+//
+//   MPI_Comm_size( MPI_COMM_WORLD, &size );
+//
+//   /* determine the RANK of the current process [0:SIZE-1] */
+//   MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+//
+//
+//   // Set the input image
+//   if(rank == MASTER){
+      init_image(nx, ny, image, tmp_image);
+// }
+//
   // Call the stencil kernel
   double tic = wtime();
-  if(rank == MASTER){
+//  if(rank == MASTER){
   for (short t = 0; t < niters; ++t) {
     stencil(nx, ny, image, tmp_image);
     stencil(nx, ny, tmp_image, image);
-  }
+//  }
 }
   double toc = wtime();
 
@@ -81,14 +81,14 @@ int main(int argc, char *argv[]) {
   printf("------------------------------------\n");
 
 
-  if (rank==MASTER){
+//  if (rank==MASTER){
      output_image(OUTPUT_FILE, nx, ny, image);
-   }
+   //}
   free(image);
 
-  printf("Hello, world; from host %s: process %d of %d\n", hostname, rank, size);
+//  printf("Hello, world; from host %s: process %d of %d\n", hostname, rank, size);
 
-    MPI_Finalize();
+  //  MPI_Finalize();
     return EXIT_SUCCESS;
 }
 
