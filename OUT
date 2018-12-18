@@ -1,9 +1,9 @@
-Running on host node43-037
-Time is Tue Dec 18 15:06:11 GMT 2018
+Running on host node43-038
+Time is Tue Dec 18 15:11:42 GMT 2018
 Directory is /panfs/panasas01/cosc/dr16639/mpi
-PBS job ID is 7888924.master.cm.cluster
+PBS job ID is 7888927.master.cm.cluster
 This jobs runs on the following machines:
-node43-037
+node43-038
 ------------------------------------
- runtime: 1.251499 s
+ runtime: 0.330444 s
 ------------------------------------
