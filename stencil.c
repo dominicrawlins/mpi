@@ -201,11 +201,11 @@ void stencilwhole(const short nx, const short ny, float * restrict image, float 
     tmp_image[i*nx] += image[1+i*nx] * 0.1f;
     //#pragma vector always
     for (int j = 1; j < ny-1; ++j) {
-      tmp_image[j+i*nx] = image[j+i*nx] * 0.6f;
-      tmp_image[j+i*nx] += image[j  +(i-1)*nx] * 0.1f;
-      tmp_image[j+i*nx] += image[j  +(i+1)*nx] * 0.1f;
-      tmp_image[j+i*nx] += image[j-1+i*nx] * 0.1f;
-      tmp_image[j+i*nx] += image[j+1+i*nx] * 0.1f;
+      // tmp_image[j+i*nx] = image[j+i*nx] * 0.6f;
+      // tmp_image[j+i*nx] += image[j  +(i-1)*nx] * 0.1f;
+      // tmp_image[j+i*nx] += image[j  +(i+1)*nx] * 0.1f;
+      // tmp_image[j+i*nx] += image[j-1+i*nx] * 0.1f;
+      tmp_image[j+i*nx] = 100;//image[j+1+i*nx] * 0.1f;
     }
     //when j=nx-1
     tmp_image[(ny-1)+i*nx] = image[(ny-1)+i*nx] * 0.6f;
