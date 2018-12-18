@@ -143,9 +143,10 @@ int main(int argc, char *argv[]) {
           //send
         }
       }
+      MPI_Send(&image[first*nx], nx*(last - first + 1), MPI_FLOAT, MASTER, 1, MPI_COMM_WORLD);
 
     }
-    MPI_Send(&image[first*nx], nx*(last - first + 1), MPI_FLOAT, MASTER, 1, MPI_COMM_WORLD);
+
   }
 
 
