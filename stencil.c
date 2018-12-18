@@ -134,9 +134,9 @@ int main(int argc, char *argv[]) {
       }
       else{
         for(short t = 0; t < niters; t++){
-          MPI_Sendrcv(&image[last*nx], nx, MPI_FLOAT, rank+1, 1, &image[(first-1)*nx], nx, MPI_FLOAT, rank-1, 1, MPI_COMM_WORLD, &status);
+          MPI_Sendrecv(&image[last*nx], nx, MPI_FLOAT, rank+1, 1, &image[(first-1)*nx], nx, MPI_FLOAT, rank-1, 1, MPI_COMM_WORLD, &status);
 
-          MPI_Sendrcv(&image[first*nx], nx, MPI_FLOAT,rank-1, 1, &image[(last+1)*nx], nx, MPI_FLOAT, rank+1, 1, MPI_COMM_WORLD, &status);
+          MPI_Sendrecv(&image[first*nx], nx, MPI_FLOAT,rank-1, 1, &image[(last+1)*nx], nx, MPI_FLOAT, rank+1, 1, MPI_COMM_WORLD, &status);
 
           stencilmiddle(nx, first, last, image, tmp_image);
           stencilmiddle(nx, first, last, image, tmp_image);
