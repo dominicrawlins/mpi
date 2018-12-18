@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
     tic = wtime();
     for (short t = 0; t < niters; ++t) {
       printf("%d\n", t);
-      stencilwhole(first, last, image, tmp_image);
+      stencilwhole(first, ny, image, tmp_image);
       stencilwhole(first, ny, tmp_image, image);
     }
     printf("\n\nsize only 1\n\n\n");
@@ -110,8 +110,8 @@ int main(int argc, char *argv[]) {
         MPI_Recv(&image[(last+1)*nx], nx, MPI_FLOAT, 1, 1, MPI_COMM_WORLD, &status);
 
 
-        stenciltop(nx, last, image, tmp_image);
-        stenciltop(nx, last, tmp_image, image);
+        stenciltop(nx, ny, image, tmp_image);
+        stenciltop(nx, ny, tmp_image, image);
 
       }
       for(short processRank = 1; processRank < size; processRank++){
@@ -181,6 +181,7 @@ void stencilwhole(const short nx, const short ny, float * restrict image, float 
   tmp_image[0] += image[0] * 0.1f;
   //#pragma vector always
   for (int j = 1; j < ny-1; ++j) {
+    printf("i need to reach %d and im at %d", ny-1, j);
     tmp_image[j] = image[j] * 0.6f;
     tmp_image[j] += image[j  +nx] * 0.1f;
     tmp_image[j] += image[j-1] * 0.1f;
