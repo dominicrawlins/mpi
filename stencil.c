@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
   if(size == 1){
     tic = wtime();
     for (short t = 0; t < niters; ++t) {
-      printf("%d\n", t);
+
       stencilwhole(nx, ny, image, tmp_image);
       stencilwhole(nx, ny, tmp_image, image);
     }
@@ -175,13 +175,11 @@ int main(int argc, char *argv[]) {
 void stencilwhole(const short nx, const short ny, float * restrict image, float * restrict tmp_image) {
   //when i=0
   //when j=0
-  printf("here nx:%d ny:%d\n", nx, ny);
   tmp_image[0] = image[0] * 0.6f;
   tmp_image[0] += image[nx] * 0.1f;
   tmp_image[0] += image[0] * 0.1f;
   //#pragma vector always
   for (int j = 1; j < ny-1; ++j) {
-    printf("i need to reach %d and im at %d", ny-1, j);
     tmp_image[j] = image[j] * 0.6f;
     tmp_image[j] += image[j  +nx] * 0.1f;
     tmp_image[j] += image[j-1] * 0.1f;
@@ -205,7 +203,7 @@ void stencilwhole(const short nx, const short ny, float * restrict image, float 
       tmp_image[j+i*nx] += image[j  +(i-1)*nx] * 0.1f;
       tmp_image[j+i*nx] += image[j  +(i+1)*nx] * 0.1f;
       tmp_image[j+i*nx] += image[j-1+i*nx] * 0.1f;
-      tmp_image[j+i*nx] = image[j+1+i*nx] * 0.1f;
+      tmp_image[j+i*nx] += image[j+1+i*nx] * 0.1f;
     }
     //when j=nx-1
     tmp_image[(ny-1)+i*nx] = image[(ny-1)+i*nx] * 0.6f;
