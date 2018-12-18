@@ -24,7 +24,7 @@ void init_image(const short nx, const short ny, float * restrict  image, float *
 void output_image(const char * file_name, const short nx, const short ny, float *image);
 double wtime(void);
 short calculateRowBoundary(const short ny, const short rank, const noOfPartitions, short topOrBottom);
-short calculateAdjacentRank(const short direction, const short rank, const short noOfProcesses);
+//short calculateAdjacentRank(const short direction, const short rank, const short noOfProcesses);
 
 int main(int argc, char *argv[]) {
 
@@ -260,7 +260,7 @@ int main(int argc, char *argv[]) {
     }
 
     void stencilbottom(const short nx, const short top, const short bottom, float * restrict image, float * restrict tmp_image){
-      for (int i = top; i <= bottom; ++i) {
+      for (int i = top; i < bottom; ++i) {
         //when j=0
         tmp_image[i*nx] = image[i*nx] * 0.6f;
         tmp_image[i*nx] += image[(i-1)*nx] * 0.1f;
@@ -282,143 +282,143 @@ int main(int argc, char *argv[]) {
 
 
       //when j=0
-      tmp_image[(ny-1)*nx] = image[(ny-1)*nx] * 0.6f;
-      tmp_image[(ny-1)*nx] += image[((ny-1)-1)*nx] * 0.1f;
-      tmp_image[(ny-1)*nx] += image[1+(ny-1)*nx] * 0.1f;
+      tmp_image[(bottom-1)*nx] = image[(bottom-1)*nx] * 0.6f;
+      tmp_image[(bottom-1)*nx] += image[((bottom-1)-1)*nx] * 0.1f;
+      tmp_image[(bottom-1)*nx] += image[1+(bottom-1)*nx] * 0.1f;
 
       for (int j = 1; j < nx-1; ++j) {
-        tmp_image[j+(ny-1)*nx] = image[j+(ny-1)*nx] * 0.6f;
-        tmp_image[j+(ny-1)*nx] += image[j  +((ny-1)-1)*nx] * 0.1f;
-        tmp_image[j+(ny-1)*nx] += image[j-1+(ny-1)*nx] * 0.1f;
-        tmp_image[j+(ny-1)*nx] += image[j+1+(ny-1)*nx] * 0.1f;
+        tmp_image[j+(bottom-1)*nx] = image[j+(bottom-1)*nx] * 0.6f;
+        tmp_image[j+(bottom-1)*nx] += image[j  +((bottom-1)-1)*nx] * 0.1f;
+        tmp_image[j+(bottom-1)*nx] += image[j-1+(bottom-1)*nx] * 0.1f;
+        tmp_image[j+(bottom-1)*nx] += image[j+1+(bottom-1)*nx] * 0.1f;
       }
-      //when j=ny-1
-      tmp_image[(nx-1)+(ny-1)*nx] = image[(nx-1)+(ny-1)*nx] * 0.6f;
-      tmp_image[(nx-1)+(ny-1)*nx] += image[(nx-1)  +((ny-1)-1)*nx] * 0.1f;
-      tmp_image[(nx-1)+(ny-1)*nx] += image[(nx-1)-1+(ny-1)*nx] * 0.1f;
+      //when j=bottom-1
+      tmp_image[(nx-1)+(bottom-1)*nx] = image[(nx-1)+(bottom-1)*nx] * 0.6f;
+      tmp_image[(nx-1)+(bottom-1)*nx] += image[(nx-1)  +((bottom-1)-1)*nx] * 0.1f;
+      tmp_image[(nx-1)+(bottom-1)*nx] += image[(nx-1)-1+(bottom-1)*nx] * 0.1f;
     }
 
-  }
-
-  //middle partitions
-  void stencilmiddle(const short nx, const short top, const short bottom, float * restrict image, float * restrict tmp_image){
-    for (int i = top; i <= bottom; ++i) {
-      //when j=0
-      tmp_image[i*nx] = image[i*nx] * 0.6f;
-      tmp_image[i*nx] += image[(i-1)*nx] * 0.1f;
-      tmp_image[i*nx] += image[(i+1)*nx] * 0.1f;
-      tmp_image[i*nx] += image[1+i*nx] * 0.1f;
-      for (int j = 1; j < nx-1; ++j) {
-        tmp_image[j+i*nx] = image[j+i*nx] * 0.6f;
-        tmp_image[j+i*nx] += image[j  +(i-1)*nx] * 0.1f;
-        tmp_image[j+i*nx] += image[j  +(i+1)*nx] * 0.1f;
-        tmp_image[j+i*nx] += image[j-1+i*nx] * 0.1f;
-        tmp_image[j+i*nx] += image[j+1+i*nx] * 0.1f;
-      }
-      //when j=nx-1
-      tmp_image[(nx-1)+i*nx] = image[(nx-1)+i*nx] * 0.6f;
-      tmp_image[(nx-1)+i*nx] += image[(nx-1)  +(i-1)*nx] * 0.1f;
-      tmp_image[(nx-1)+i*nx] += image[(nx-1)  +(i+1)*nx] * 0.1f;
-      tmp_image[(nx-1)+i*nx] += image[(nx-1)-1+i*nx] * 0.1f;
-    }
-  }
 
 
-
-  // Create the input image
-  void init_image(const short nx, const short ny, float * restrict image, float * restrict tmp_image) {
-    // Zero everything
-    for (int i = 0; i < nx; ++i) {
-      for (int j = 0; j < ny; ++j) {
-        image[j+i*ny] = 0.0f;
-        tmp_image[j+i*ny] = 0.0f;
+    //middle partitions
+    void stencilmiddle(const short nx, const short top, const short bottom, float * restrict image, float * restrict tmp_image){
+      for (int i = top; i <= bottom; ++i) {
+        //when j=0
+        tmp_image[i*nx] = image[i*nx] * 0.6f;
+        tmp_image[i*nx] += image[(i-1)*nx] * 0.1f;
+        tmp_image[i*nx] += image[(i+1)*nx] * 0.1f;
+        tmp_image[i*nx] += image[1+i*nx] * 0.1f;
+        for (int j = 1; j < nx-1; ++j) {
+          tmp_image[j+i*nx] = image[j+i*nx] * 0.6f;
+          tmp_image[j+i*nx] += image[j  +(i-1)*nx] * 0.1f;
+          tmp_image[j+i*nx] += image[j  +(i+1)*nx] * 0.1f;
+          tmp_image[j+i*nx] += image[j-1+i*nx] * 0.1f;
+          tmp_image[j+i*nx] += image[j+1+i*nx] * 0.1f;
+        }
+        //when j=nx-1
+        tmp_image[(nx-1)+i*nx] = image[(nx-1)+i*nx] * 0.6f;
+        tmp_image[(nx-1)+i*nx] += image[(nx-1)  +(i-1)*nx] * 0.1f;
+        tmp_image[(nx-1)+i*nx] += image[(nx-1)  +(i+1)*nx] * 0.1f;
+        tmp_image[(nx-1)+i*nx] += image[(nx-1)-1+i*nx] * 0.1f;
       }
     }
 
-    // Checkerboard
-    for (int i = 0; i < 8; ++i) {
-      for (int j = 0; j < 8; ++j) {
-        for (int ii = j*nx/8; ii < (j+1)*nx/8; ++ii) {
-          for (int jj = i*ny/8; jj < (i+1)*ny/8; ++jj) {
-            if ((i+j)%2)
-            image[jj+ii*ny] = 100.0f;
+
+
+    // Create the input image
+    void init_image(const short nx, const short ny, float * restrict image, float * restrict tmp_image) {
+      // Zero everything
+      for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+          image[j+i*ny] = 0.0f;
+          tmp_image[j+i*ny] = 0.0f;
+        }
+      }
+
+      // Checkerboard
+      for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+          for (int ii = j*nx/8; ii < (j+1)*nx/8; ++ii) {
+            for (int jj = i*ny/8; jj < (i+1)*ny/8; ++jj) {
+              if ((i+j)%2)
+              image[jj+ii*ny] = 100.0f;
+            }
           }
         }
       }
     }
-  }
 
-  // Routine to output the image in Netpbm grayscale binary image format
-  void output_image(const char * file_name, const short nx, const short ny, float *image) {
+    // Routine to output the image in Netpbm grayscale binary image format
+    void output_image(const char * file_name, const short nx, const short ny, float *image) {
 
-    // Open output file
-    FILE *fp = fopen(file_name, "w");
-    if (!fp) {
-      fprintf(stderr, "Error: Could not open %s\n", OUTPUT_FILE);
-      exit(EXIT_FAILURE);
-    }
-
-    // Ouptut image header
-    fprintf(fp, "P5 %d %d 255\n", nx, ny);
-
-    // Calculate maximum value of image
-    // This is used to rescale the values
-    // to a range of 0-255 for output
-    float maximum = 0.0f;
-    for (int i = 0; i < nx; ++i) {
-      for (int j = 0; j < ny; ++j) {
-        if (image[j+i*ny] > maximum)
-        maximum = image[j+i*ny];
+      // Open output file
+      FILE *fp = fopen(file_name, "w");
+      if (!fp) {
+        fprintf(stderr, "Error: Could not open %s\n", OUTPUT_FILE);
+        exit(EXIT_FAILURE);
       }
-    }
 
-    // Output image, converting to numbers 0-255
-    for (int i = 0; i < nx; ++i) {
-      for (int j = 0; j < ny; ++j) {
-        fputc((char)(255.0f*image[j+i*ny]/maximum), fp);
+      // Ouptut image header
+      fprintf(fp, "P5 %d %d 255\n", nx, ny);
+
+      // Calculate maximum value of image
+      // This is used to rescale the values
+      // to a range of 0-255 for output
+      float maximum = 0.0f;
+      for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+          if (image[j+i*ny] > maximum)
+          maximum = image[j+i*ny];
+        }
       }
-    }
 
-    // Close the file
-    fclose(fp);
+      // Output image, converting to numbers 0-255
+      for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+          fputc((char)(255.0f*image[j+i*ny]/maximum), fp);
+        }
+      }
 
-  }
-  //calculate the boundaries of the given row
-  short calculateRowBoundary(const short ny, const short rank, const noOfPartitions, short topOrBottom){
-    short output;
-    if(topOrBottom == LOW){
-      output = ((ny * rank) / noOfPartitions);
-    }
-    if(topOrBottom == HIGH){
-      output = ((ny * (rank+1)) / noOfPartitions) - 1;
-    }
-    return output;
-  }
+      // Close the file
+      fclose(fp);
 
-  short calculateAdjacentRank(const short direction, const short rank, const short noOfProcesses){
+    }
+    //calculate the boundaries of the given row
+    short calculateRowBoundary(const short ny, const short rank, const short noOfPartitions, short topOrBottom){
+      short output;
+      if(topOrBottom == LOW){
+        output = ((ny * rank) / noOfPartitions);
+      }
+      if(topOrBottom == HIGH){
+        output = ((ny * (rank+1)) / noOfPartitions) - 1;
+      }
+      return output;
+    }
+    /*
+    short calculateAdjacentRank(const short direction, const short rank, const short noOfProcesses){
     short output;
     if(direction == ABOVE){
-      if(rank == 0){
-        output = noOfProcesses - 1;
-      }
-      else{
-        output = rank - 1;
-      }
-    }
-    else if(direction == BELOW){
-      if(rank = noOfProcesses - 1){
-        output = 0;
-      }
-      else{
-        output = rank + 1;
-      }
-    }
-    return output;
+    if(rank == 0){
+    output = noOfProcesses - 1;
   }
+  else{
+  output = rank - 1;
+}
+}
+else if(direction == BELOW){
+if(rank = noOfProcesses - 1){
+output = 0;
+}
+else{
+output = rank + 1;
+}
+}
+return output;
+}*/
 
-  // Get the current time in seconds since the Epoch
-  double wtime(void) {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec + tv.tv_usec*1e-6;
-  }
+// Get the current time in seconds since the Epoch
+double wtime(void) {
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return tv.tv_sec + tv.tv_usec*1e-6;
+}
