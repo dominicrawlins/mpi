@@ -111,10 +111,6 @@ int main(int argc, char *argv[]) {
       }
       toc = wtime();
 
-      printf("------------------------------------\n");
-      printf(" runtime: %lf s\n", toc-tic);
-      printf("------------------------------------\n");
-
       output_image(OUTPUT_FILE, nx, ny, image);
     }
 
@@ -148,6 +144,10 @@ int main(int argc, char *argv[]) {
     }
 
   }
+
+  printf("------------------------------------\n");
+  printf(" runtime: %lf s\n", toc-tic);
+  printf("------------------------------------\n");
 
 
   free(image);
