@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
   if(size == 1){
     tic = wtime();
     for (short t = 0; t < niters; ++t) {
-      printf("%d\n", niters);
+      printf("%d\n", t);
       stencilwhole(first, last, image, tmp_image);
       stencilwhole(first, ny, tmp_image, image);
     }
