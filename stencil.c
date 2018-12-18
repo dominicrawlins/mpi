@@ -90,6 +90,13 @@ int main(int argc, char *argv[]) {
     }
     printf("\n\nsize only 1\n\n\n");
     toc = wtime();
+
+    printf("------------------------------------\n");
+    printf(" runtime: %lf s\n", toc-tic);
+    printf("------------------------------------\n");
+
+    output_image(OUTPUT_FILE, nx, ny, image);
+
   }
   else{
     printf("\n\n size more than one \n\n\n");
@@ -112,6 +119,13 @@ int main(int argc, char *argv[]) {
         MPI_Recv(&image[processFirst * nx], nx*(processLast - processFirst + 1), MPI_FLOAT, processRank, 1, MPI_COMM_WORLD, &status);
       }
       toc = wtime();
+
+      printf("------------------------------------\n");
+      printf(" runtime: %lf s\n", toc-tic);
+      printf("------------------------------------\n");
+
+      output_image(OUTPUT_FILE, nx, ny, image);
+
 
     }
 
@@ -146,11 +160,6 @@ int main(int argc, char *argv[]) {
 
   }
 
-  printf("------------------------------------\n");
-  printf(" runtime: %lf s\n", toc-tic);
-  printf("------------------------------------\n");
-
-  output_image(OUTPUT_FILE, nx, ny, image);
 
 
   free(image);
