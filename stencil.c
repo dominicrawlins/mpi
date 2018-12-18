@@ -88,9 +88,11 @@ int main(int argc, char *argv[]) {
       stencilwhole(first, last, image, tmp_image);
       stencilwhole(first, ny, tmp_image, image);
     }
+    printf("\n\nsize only 1\n\n\n");
     toc = wtime();
   }
   else{
+    printf("\n\n size more than one \n\n\n");
     if(rank == MASTER){
       tic = wtime();
       for(short t = 0; t < niters; t++){
