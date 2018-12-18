@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
     tic = wtime();
     for (short t = 0; t < niters; ++t) {
       stencilwhole(first, last, image, tmp_image);
-      stencilwhole(first, ny,  image, tmp_image);
+      stencilwhole(first, ny, tmp_image, image);
     }
     printf("\n\nsize only 1\n\n\n");
     toc = wtime();
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
 
 
         stenciltop(nx, last, image, tmp_image);
-        stenciltop(nx, last, image, tmp_image);
+        stenciltop(nx, last, tmp_image, image);
 
       }
       for(short processRank = 1; processRank < size; processRank++){
@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
 
 
           stencilbottom(nx, first, last, image, tmp_image);
-          stencilbottom(nx, first, last, image, tmp_image );
+          stencilbottom(nx, first, last, tmp_image, image);
 
         }
       }
@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
           MPI_Sendrecv(&image[first*nx], nx, MPI_FLOAT,rank-1, 1, &image[(last+1)*nx], nx, MPI_FLOAT, rank+1, 1, MPI_COMM_WORLD, &status);
 
           stencilmiddle(nx, first, last, image, tmp_image);
-          stencilmiddle(nx, first, last, image, tmp_image);
+          stencilmiddle(nx, first, last, tmp_image, image);
           //send
         }
       }
