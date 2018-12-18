@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
   // Set the input image
   //if(rank == MASTER){
   init_image(nx, ny, image, tmp_image);
-  output_image("startimage.jpg", nx, ny, image);
+  output_image("startimage.pgm", nx, ny, image);
   //}
 
   // Call the stencil kernel
