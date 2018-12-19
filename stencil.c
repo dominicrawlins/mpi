@@ -110,8 +110,8 @@ int main(int argc, char *argv[]) {
         MPI_Recv(&image[(last+1)*nx], nx, MPI_FLOAT, 1, 1, MPI_COMM_WORLD, &status);
 
 
-        stenciltop(nx, ny, image, tmp_image);
-        stenciltop(nx, ny, tmp_image, image);
+        stenciltop(nx, last, image, tmp_image);
+        stenciltop(nx, last, tmp_image, image);
 
       }
       for(short processRank = 1; processRank < size; processRank++){
@@ -295,20 +295,20 @@ void stencilbottom(const short nx, const short top, const short bottom, float * 
 
 
   //when j=0
-  tmp_image[(bottom-1)*nx] = image[(bottom-1)*nx] * 0.6f;
-  tmp_image[(bottom-1)*nx] += image[((bottom-1)-1)*nx] * 0.1f;
-  tmp_image[(bottom-1)*nx] += image[1+(bottom-1)*nx] * 0.1f;
+  tmp_image[bottom*nx] = image[bottom*nx] * 0.6f;
+  tmp_image[bottom*nx] += image[(bottom-1)*nx] * 0.1f;
+  tmp_image[bottom*nx] += image[1+bottom*nx] * 0.1f;
 
   for (int j = 1; j < nx-1; ++j) {
-    tmp_image[j+(bottom-1)*nx] = image[j+(bottom-1)*nx] * 0.6f;
-    tmp_image[j+(bottom-1)*nx] += image[j  +((bottom-1)-1)*nx] * 0.1f;
-    tmp_image[j+(bottom-1)*nx] += image[j-1+(bottom-1)*nx] * 0.1f;
-    tmp_image[j+(bottom-1)*nx] += image[j+1+(bottom-1)*nx] * 0.1f;
+    tmp_image[j+bottom*nx] = image[j+bottom*nx] * 0.6f;
+    tmp_image[j+bottom*nx] += image[j  +(bottom-1)*nx] * 0.1f;
+    tmp_image[j+bottom*nx] += image[j-1+bottom*nx] * 0.1f;
+    tmp_image[j+bottom*nx] += image[j+1+bottom*nx] * 0.1f;
   }
-  //when j=bottom-1
-  tmp_image[(nx-1)+(bottom-1)*nx] = image[(nx-1)+(bottom-1)*nx] * 0.6f;
-  tmp_image[(nx-1)+(bottom-1)*nx] += image[(nx-1)  +((bottom-1)-1)*nx] * 0.1f;
-  tmp_image[(nx-1)+(bottom-1)*nx] += image[(nx-1)-1+(bottom-1)*nx] * 0.1f;
+  //when j = nx-1
+  tmp_image[(nx-1)+bottom*nx] = image[(nx-1)+bottom*nx] * 0.6f;
+  tmp_image[(nx-1)+bottom*nx] += image[(nx-1)  +(bottom-1)*nx] * 0.1f;
+  tmp_image[(nx-1)+bottom*nx] += image[(nx-1)-1+bottom*nx] * 0.1f;
 }
 
 
