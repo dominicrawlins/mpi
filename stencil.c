@@ -111,6 +111,11 @@ int main(int argc, char *argv[]) {
 
 
         stenciltop(nx, last, image, tmp_image);
+
+
+        MPI_Send(&tmp_image[last*nx], nx, MPI_FLOAT, 1, 1, MPI_COMM_WORLD);
+
+        MPI_Recv(&tmp_image[(last+1)*nx], nx, MPI_FLOAT, 1, 1, MPI_COMM_WORLD, &status);
         stenciltop(nx, last, tmp_image, image);
 
       }
@@ -141,6 +146,10 @@ int main(int argc, char *argv[]) {
 
 
           stencilbottom(nx, first, last, image, tmp_image);
+
+          MPI_Recv(&tmp_image[(first-1)*nx], nx, MPI_FLOAT, rank-1, 1, MPI_COMM_WORLD, &status);
+
+          MPI_Send(&tmp_image[first*nx], nx, MPI_FLOAT, rank - 1, 1, MPI_COMM_WORLD);
           stencilbottom(nx, first, last, tmp_image, image);
 
         }
@@ -152,6 +161,11 @@ int main(int argc, char *argv[]) {
           MPI_Sendrecv(&image[first*nx], nx, MPI_FLOAT,rank-1, 1, &image[(last+1)*nx], nx, MPI_FLOAT, rank+1, 1, MPI_COMM_WORLD, &status);
 
           stencilmiddle(nx, first, last, image, tmp_image);
+
+          MPI_Sendrecv(&tmp_image[last*nx], nx, MPI_FLOAT, rank+1, 1, &tmp_image[(first-1)*nx], nx, MPI_FLOAT, rank-1, 1, MPI_COMM_WORLD, &status);
+
+          MPI_Sendrecv(&tmp_image[first*nx], nx, MPI_FLOAT,rank-1, 1, &tmp_image[(last+1)*nx], nx, MPI_FLOAT, rank+1, 1, MPI_COMM_WORLD, &status);
+
           stencilmiddle(nx, first, last, tmp_image, image);
           //send
         }
