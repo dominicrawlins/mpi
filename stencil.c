@@ -212,7 +212,7 @@ void stencilwhole(const short nx, const short ny, float * restrict image, float 
     tmp_image[i*nx] += image[(i+1)*nx] * 0.1f;
     tmp_image[i*nx] += image[1+i*nx] * 0.1f;
     //#pragma vector always
- # pragma omp parallel for shared(image, tmp_image, nx, ny, i) schedule(dynamic, 16)
+ # pragma omp parallel for shared(image, tmp_image, nx, ny, i) schedule(dynamic, 2)
 
     for (int j = 1; j < ny-1; ++j) {
       tmp_image[j+i*nx] = image[j+i*nx] * 0.6f;
