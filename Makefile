@@ -6,7 +6,7 @@ CC=mpicc
 
 COMP=GNU
 ifeq ($(COMP), GNU)
-  CFLAGS=-std=c99 -Wall -Ofast
+  CFLAGS=-std=c99 -openmp -pthread -Wall -Ofast
 endif
 
 EXE1=stencil.exe
