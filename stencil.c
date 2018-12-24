@@ -94,15 +94,14 @@ int main(int argc, char *argv[]) {
     toc = wtime();
 
     printf("------------------------------------\n");
-    printf(" runtime: %lf s\n", toc-tic);
+    printf(" runtime size 1: %lf s\n", toc-tic);
     printf("------------------------------------\n");
 
     output_image(OUTPUT_FILE, nx, ny, image);
 
   }
   else{
-    printf("\n\n size more than one \n\n\n");
-    if(rank == MASTER){
+        if(rank == MASTER){
       tic = wtime();
       for(short t = 0; t < niters; t++){
         MPI_Send(&image[last*nx], nx, MPI_FLOAT, 1, 1, MPI_COMM_WORLD);
@@ -128,7 +127,7 @@ int main(int argc, char *argv[]) {
       toc = wtime();
 
       printf("------------------------------------\n");
-      printf(" runtime: %lf s\n", toc-tic);
+      printf(" runtime size %d: %lf s\n", size, toc-tic);
       printf("------------------------------------\n");
 
       output_image(OUTPUT_FILE, nx, ny, image);
