@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include "mpi.h"
+#include "omp.h"
 
 // Define output file name
 #define OUTPUT_FILE "stencil.pgm"
@@ -94,14 +95,14 @@ int main(int argc, char *argv[]) {
     toc = wtime();
 
     printf("------------------------------------\n");
-    printf(" runtime size 1: %lf s\n", toc-tic);
+    printf(" runtime: %lf s\n", toc-tic);
     printf("------------------------------------\n");
 
     output_image(OUTPUT_FILE, nx, ny, image);
 
   }
   else{
-        if(rank == MASTER){
+    if(rank == MASTER){
       tic = wtime();
       for(short t = 0; t < niters; t++){
         MPI_Send(&image[last*nx], nx, MPI_FLOAT, 1, 1, MPI_COMM_WORLD);
@@ -127,7 +128,7 @@ int main(int argc, char *argv[]) {
       toc = wtime();
 
       printf("------------------------------------\n");
-      printf(" runtime size %d: %lf s\n", size, toc-tic);
+      printf(" runtime: %lf s\n", toc-tic);
       printf("------------------------------------\n");
 
       output_image(OUTPUT_FILE, nx, ny, image);
@@ -211,6 +212,8 @@ void stencilwhole(const short nx, const short ny, float * restrict image, float 
     tmp_image[i*nx] += image[(i+1)*nx] * 0.1f;
     tmp_image[i*nx] += image[1+i*nx] * 0.1f;
     //#pragma vector always
+    #pragma omp parallel shared(tmp_image, image){
+    #pragma omp for
     for (int j = 1; j < ny-1; ++j) {
       tmp_image[j+i*nx] = image[j+i*nx] * 0.6f;
       tmp_image[j+i*nx] += image[j  +(i-1)*nx] * 0.1f;
@@ -218,6 +221,7 @@ void stencilwhole(const short nx, const short ny, float * restrict image, float 
       tmp_image[j+i*nx] += image[j-1+i*nx] * 0.1f;
       tmp_image[j+i*nx] += image[j+1+i*nx] * 0.1f;
     }
+  }
     //when j=nx-1
     tmp_image[(ny-1)+i*nx] = image[(ny-1)+i*nx] * 0.6f;
     tmp_image[(ny-1)+i*nx] += image[(ny-1)  +(i-1)*nx] * 0.1f;
